@@ -1,38 +1,40 @@
-.App {
-  text-align: center;
+.auth-illustration {
+  position: absolute;
+  width: 45%;
+  margin: auto;
+  bottom: 0;right: 0;
+  z-index: -1;
+  max-width: 645px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+@media (max-width: 600px) {
+  .auth-illustration {
+    width: 70%;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.MuiList-root.MuiMenu-list.MuiList-padding, .MuiSpeedDialAction-fab, .MuiButtonBase-root.MuiFab-root.MuiSpeedDialAction-fab.MuiSpeedDialAction-fabClosed.MuiFab-sizeSmall {
+  background: #3B4353 !important;color: #A3F7BF !important;
 }
 
-.App-link {
-  color: #61dafb;
+.MuiButtonBase-root.MuiFab-root.MuiSpeedDial-fab.MuiFab-primary, .MuiSpeedDial-root.MuiSpeedDial-directionDown.makeStyles-speedDial-6, .MuiFab-label  {
+  height: 30px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  width: 30px !important;
+  padding: 0;
+  display: flex !important;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#htmlEditor,#cssEditor,#jsEditor {
+  position: absolute;
+  height: 100% !important;
+  width: 100% !important;
+  margin: auto;
+  top: 0;right: 0;left: 0;bottom: 0;
+  display: none;
+}
+
+#htmlEditor {
+  display: block;
 }

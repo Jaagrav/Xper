@@ -1,3 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&family=Orbitron&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-user-drag: none;
+  text-decoration: none;
+  user-select: none;
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,6 +15,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #2E3440;
 }
 
 code {
