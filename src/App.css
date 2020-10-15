@@ -38,3 +38,23 @@
 #htmlEditor {
   display: block;
 }
+
+.swal2-popup{
+  background-color: #2E3440 !important;
+}
+.swal2-title {
+  color: #A3F7BF !important;
+  font-family: 'Comfortaa', sans-serif;
+}
+.swal2-html-container{
+  color: #fff !important;
+  font-family: 'Comfortaa', sans-serif;
+}
+.swal2-styled.swal2-confirm {
+  background-color: #A3F7BF !important;color: #2E3440 !important;
+  font-family: 'Comfortaa', sans-serif;
+}
+.swal2-styled.swal2-cancel{
+  background-color: #FF6D6D !important;color: #fff !important;
+  font-family: 'Comfortaa', sans-serif;
+}

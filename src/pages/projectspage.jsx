@@ -3,6 +3,9 @@ import { Link, useHistory } from 'react-router-dom';
 
 import firebase from '../components/firebase';
 
+import Swal from 'sweetalert2';
+// import 'sweetalert2/src/sweetalert2.scss';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
 import IconButton from '@material-ui/core/IconButton';
@@ -177,16 +180,50 @@ function Projectspage() {
                 setDisplayName(firebaseUser.displayName);
                 myUID.current = firebaseUser.uid;
                 firebaseRef.current = firebase.database().ref("WebDev/" + firebaseUser.uid)
-                firebaseRef.current.on("child_added", snap => {
-                    const key = snap.key;
-                    const project = { ...snap.val(), key: key };
-                    setProjects(prevProjects => [...prevProjects, project]);
-                })
-                startBackdrop(false);
+                loadProjects();
             }
             else history.push("/auth");
         });
     }, []);
+
+    function loadProjects() {
+        firebaseRef.current.once("value").then(snap => {
+            startBackdrop(false);
+            // const key = snap.key;
+            // const project = { ...snap.val(), key: key };
+            // setProjects(prevProjects => [...prevProjects, project]);
+            console.log(snap.val())
+            let tempProjects = [];
+            for (let i in snap.val()) {
+                const key = i;
+                const project = { ...snap.val()[i], key: key };
+                tempProjects.push(project);
+            }
+            setProjects(tempProjects);
+
+        })
+    }
+
+    function deleteProject(projectToBeDeleted) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                firebaseRef.current.child(projectToBeDeleted).remove(); loadProjects();
+                Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                )
+            }
+        })
+    }
 
     return (
         <div>
@@ -226,7 +263,7 @@ function Projectspage() {
                             <CardActions>
                                 <Button className={classes.openBtn} startIcon={<LaunchIcon />} size="small" onClick={() => { startBackdrop(true); history.push("/edit/" + myUID.current + "/" + project.key + "/") }}>Open</Button>
                                 <Button className={classes.openBtn} startIcon={<LanguageIcon />} size="small" onClick={() => { startBackdrop(true); history.push("/deploy/" + myUID.current + "/" + project.key + "/") }}>Visit</Button>
-                                <Button className={classes.deleteBtn} startIcon={<DeleteIcon />} size="small" onClick={() => { firebaseRef.current.child(project.key).remove(); }}>Delete</Button>
+                                <Button className={classes.deleteBtn} startIcon={<DeleteIcon />} size="small" onClick={() => { deleteProject(project.key) }}>Delete</Button>
                             </CardActions>
                         </Card>
                     ))}
