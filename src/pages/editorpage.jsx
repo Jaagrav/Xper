@@ -357,7 +357,7 @@ function Editorpage(props) {
                     theme="nord_dark"
                     name="htmlEditor"
                     fontSize={18}
-                    wrapEnabled={true}
+                    wrapEnabled={false}
                     ref={htmlEditorRef}
                     showPrintMargin={false}
                     showGutter={true}
@@ -377,7 +377,7 @@ function Editorpage(props) {
                     theme="nord_dark"
                     name="cssEditor"
                     fontSize={18}
-                    wrapEnabled={true}
+                    wrapEnabled={false}
                     ref={cssEditorRef}
                     showPrintMargin={false}
                     showGutter={true}
@@ -397,7 +397,7 @@ function Editorpage(props) {
                     theme="nord_dark"
                     name="jsEditor"
                     fontSize={18}
-                    wrapEnabled={true}
+                    wrapEnabled={false}
                     ref={jsEditorRef}
                     showPrintMargin={false}
                     showGutter={true}
