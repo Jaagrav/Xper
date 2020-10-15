@@ -181,8 +181,8 @@ function Projectspage() {
                     const key = snap.key;
                     const project = { ...snap.val(), key: key };
                     setProjects(prevProjects => [...prevProjects, project]);
-                    startBackdrop(false);
                 })
+                startBackdrop(false);
             }
             else history.push("/auth");
         });
