@@ -224,7 +224,8 @@ function Editorpage(props) {
 
     window.addEventListener('resize', e => {
         console.log("Window Resized!")
-        window.location.reload(true);
+        if (window.innerWidth < 1000)
+            window.location.reload(true);
     });
 
     function openTab(tabName) {
