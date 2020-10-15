@@ -224,7 +224,7 @@ function Editorpage(props) {
 
     window.addEventListener('resize', e => {
         console.log("Window Resized!")
-        if (window.innerWidth < 1000)
+        if (window.innerWidth > 1000)
             window.location.reload(true);
     });
 
