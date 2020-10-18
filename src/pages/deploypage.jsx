@@ -45,17 +45,22 @@ function Deploypage(props) {
     React.useEffect(() => {
         firebase.database().ref("WebDev/" + userID + "/" + projectID).once("value").then(snap => {
             if (snap.key === projectID) {
-                let output = iframeRef.current;
+                var old_element = document.getElementsByClassName(classes.iframe)[0];
+                var new_element = old_element.cloneNode(true);
+                old_element.parentNode.replaceChild(new_element, old_element);
+                let output = new_element.contentWindow.document;
                 let htmlDoc = "<style>" + snap.val().css + "</style>" + snap.val().html + "<script>" + snap.val().js + "</script>";
                 try {
-                    output.src = "about:blank";
-                    output.srcdoc = (htmlDoc);
+                    // output.contentWindow.location.reload(true);
+                    output.open();
+                    output.write(htmlDoc);
+                    output.close();
                     setOpen(false);
+                    document.title = output.title + ' - Xper';
                 } catch (e) {
                     //Fuck You error
                     console.log(e)
                 }
-                setTimeout(() => { document.title = output.contentWindow.document.title + ' - Xper'; }, 100);
             }
         }).catch(error => {
             console.warn('Contents not found!');
@@ -63,12 +68,18 @@ function Deploypage(props) {
         })
         firebase.database().ref("WebDev/" + userID).on("child_changed", snap => {
             if (snap.key === projectID) {
-                let output = iframeRef.current;
+                var old_element = document.getElementsByClassName(classes.iframe)[0];
+                var new_element = old_element.cloneNode(true);
+                old_element.parentNode.replaceChild(new_element, old_element);
+                let output = new_element.contentWindow.document;
                 let htmlDoc = "<style>" + snap.val().css + "</style>" + snap.val().html + "<script>" + snap.val().js + "</script>";
                 try {
-                    output.src = "about:blank";
-                    output.srcdoc = (htmlDoc);
-                    document.title = output.contentWindow.document.title + ' - Xper';
+                    // output.contentWindow.location.reload(true);
+                    output.open();
+                    output.write(htmlDoc);
+                    output.close();
+                    document.title = output.title + ' - Xper';
+                    setOpen(false);
                 } catch (e) {
                     //Fuck You error
                     console.log(e)
