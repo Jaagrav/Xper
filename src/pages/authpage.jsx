@@ -60,12 +60,10 @@ function Authpage() {
         firebase.auth().signInWithPopup(provider)
     }
 
-    React.useEffect(() => {
-        firebase.auth().onAuthStateChanged(firebaseUser => {
-            if (firebaseUser)
-                history.push("/");
-        });
-    }, []);
+    firebase.auth().onAuthStateChanged(firebaseUser => {
+        if (firebaseUser)
+            history.push("/");
+    });
 
     return (
         <div>
