@@ -339,9 +339,9 @@ function Editorpage(props) {
             document.getElementsByClassName(classes.iframe)[0].style.width = iframeOpen ? "100%" : "0%";
 
             setTimeout(() => {
-                htmlEditorRef.current.editor.setValue(html);
-                cssEditorRef.current.editor.setValue(css);
-                jsEditorRef.current.editor.setValue(js);
+                htmlEditorRef.current.editor.resize();
+                cssEditorRef.current.editor.resize();
+                jsEditorRef.current.editor.resize();
             }, 1000)
         }
         else {
