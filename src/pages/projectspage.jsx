@@ -113,9 +113,24 @@ const useStyles = makeStyles((theme) => ({
     openBtn: {
         color: "#A3F7BF"
     },
+    noProjects: {
+        height: "fit-content",
+        width: "fit-content",
+        position: "absolute",
+        margin: "auto",
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        fontFamily: "'Comfortaa', sans-serif",
+        fontSize: '34px',
+        textAlign: "center",
+        color: '#3B4353',
+        display: "none"
+    }
 }));
 function Projectspage() {
-    document.title = "Projects - WebDev"
+    document.title = "Projects - Xper"
     const classes = useStyles();
     let history = useHistory();
 
@@ -141,6 +156,8 @@ function Projectspage() {
     };
 
     const [projects, setProjects] = React.useState([]);
+
+    const noProjects = React.useRef();
 
     const makeNewProject = (e) => {
         startBackdrop(true);
@@ -175,11 +192,11 @@ function Projectspage() {
         startBackdrop(true);
         firebase.auth().onAuthStateChanged(firebaseUser => {
             if (firebaseUser) {
-                console.log(firebaseUser)
+                // console.log(firebaseUser)
                 setUserPhoto(firebaseUser.photoURL);
                 setDisplayName(firebaseUser.displayName);
                 myUID.current = firebaseUser.uid;
-                firebaseRef.current = firebase.database().ref("WebDev/" + firebaseUser.uid)
+                firebaseRef.current = firebase.database().ref("WebDev/" + firebaseUser.uid);
                 loadProjects();
             }
             else history.push("/auth");
@@ -192,12 +209,22 @@ function Projectspage() {
             // const key = snap.key;
             // const project = { ...snap.val(), key: key };
             // setProjects(prevProjects => [...prevProjects, project]);
-            console.log(snap.val())
+            // console.log(snap.val())
+            try {
+                noProjects.current.style.display = 'block';
+            } catch (e) {
+                //fuck you error
+            }
             let tempProjects = [];
             for (let i in snap.val()) {
                 const key = i;
                 const project = { ...snap.val()[i], key: key };
                 tempProjects.push(project);
+                try {
+                    noProjects.current.style.display = 'none';
+                } catch (e) {
+                    //fuck you error
+                }
             }
             setProjects(tempProjects);
 
@@ -231,7 +258,7 @@ function Projectspage() {
                 <CircularProgress style={{ color: '#A3F7BF' }} />
             </Backdrop>
             <div className={classes.header}>
-                <div className={classes.brandingName}>WebDev</div>
+                <Link to="/"><div className={classes.brandingName}>Xper</div></Link>
                 <IconButton className={classes.photoURL} onClick={handleClick}>
                     <Avatar style={{ height: "30px", width: "30px" }} alt={displayName} src={userPhoto} />
                 </IconButton>
@@ -242,12 +269,11 @@ function Projectspage() {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                 >
-                    <MenuItem className={classes.menu} onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem className={classes.menu} onClick={handleClose}>My account</MenuItem>
                     <MenuItem className={classes.menu} onClick={() => { firebase.auth().signOut(); }}>Logout</MenuItem>
                 </Menu>
             </div>
             <div className={classes.projectsContainer}>
+                <div className={classes.noProjects} ref={noProjects}>Looks like you don't have any projects<br /><br />Click on the add button to create your first project!</div>
                 <div className={classes.projectsGrid}>
                     {projects.map(project => (
                         <Card className={classes.root} key={project.key}>
@@ -262,7 +288,7 @@ function Projectspage() {
                             </CardContent>
                             <CardActions>
                                 <Button className={classes.openBtn} startIcon={<LaunchIcon />} size="small" onClick={() => { startBackdrop(true); history.push("/edit/" + myUID.current + "/" + project.key + "/") }}>Open</Button>
-                                <Button className={classes.openBtn} startIcon={<LanguageIcon />} size="small" onClick={() => { startBackdrop(true); history.push("/deploy/" + myUID.current + "/" + project.key + "/") }}>Visit</Button>
+                                <Button className={classes.openBtn} startIcon={<LanguageIcon />} size="small" onClick={() => { window.open(("/deploy/" + myUID.current + "/" + project.key + "/"), "_blank") }}>Visit</Button>
                                 <Button className={classes.deleteBtn} startIcon={<DeleteIcon />} size="small" onClick={() => { deleteProject(project.key) }}>Delete</Button>
                             </CardActions>
                         </Card>

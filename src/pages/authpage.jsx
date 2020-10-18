@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Authpage() {
-    document.title = "Auth - WebDev"
+    document.title = "Auth - Xper";
     const classes = useStyles();
     let history = useHistory();
 
@@ -70,7 +70,7 @@ function Authpage() {
     return (
         <div>
             <div className={classes.topBar}></div>
-            <div className={classes.brandingName}>WebDev</div>
+            <div className={classes.brandingName}>Xper</div>
             <Button className={classes.authButton} onClick={handleSignIn}>Sign In with Google</Button>
             <img src={Illustration1} className={"auth-illustration"} alt="auth illustration" />
         </div>

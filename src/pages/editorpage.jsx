@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 
 import firebase from '../components/firebase';
 
@@ -21,7 +21,15 @@ import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import LaunchIcon from '@material-ui/icons/Launch';
 
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -168,18 +176,28 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down("sm")]: {
             transition: '0.4s', width: '0%',
         },
+    },
+    editors: {
+        position: 'absolute',
+        height: '100%',
+        width: '100%',
+        margin: 'auto',
+        top: 0,
+        left: 0,
+        bottom: 0,
+
     }
 }));
 
 function Editorpage(props) {
-    document.title = "Code Editor - WebDev";
+    document.title = "Code Editor - Xper";
     const classes = useStyles();
     let history = useHistory();
     let mouseDown = false;
     let codeName = React.useRef();
     let html = '', css = '', js = '';
     let htmlTabRef = React.useRef(), cssTabRef = React.useRef(), jsTabRef = React.useRef();
-    let htmlEditorRef = React.useRef(), cssEditorRef = React.useRef(), jsEditorRef = React.useRef();
+    let htmlEditorRef = React.useRef(), cssEditorRef = React.useRef(), jsEditorRef = React.useRef(), editors = React.useRef();
     let dragToIframeRef = React.useRef();
 
     let firebaseRef = React.useRef();
@@ -187,14 +205,16 @@ function Editorpage(props) {
 
     const [displayName, setDisplayName] = React.useState("");
     const [userPhoto, setUserPhoto] = React.useState("");
+    const [letEdit, setLetEdit] = React.useState(false);
 
     let userID = props.match.params.UID, projectID = props.match.params.projectID;
 
     React.useEffect(() => {
         firebase.auth().onAuthStateChanged(firebaseUser => {
+            // else if (snap.exists()) history.push("/notfound")
             if (firebaseUser) {
                 if (firebaseUser.uid === userID) {
-                    console.log(firebaseUser);
+                    // console.log(firebaseUser);
                     setUserPhoto(firebaseUser.photoURL);
                     setDisplayName(firebaseUser.displayName);
                     firebaseRef.current = firebase.database().ref("WebDev/" + userID + "/" + projectID)
@@ -210,15 +230,29 @@ function Editorpage(props) {
                             jsEditorRef.current.editor.setValue(js);
                             updateIframe();
                         }
+                    }).catch(error => {
+                        console.warn('Contents not found!');
+                        history.push("/notfound")
                     })
                 }
-                else history.push("/deploy/" + userID + "/" + projectID);
+                else {
+                    setLetEdit(true);
+                    firebase.database().ref("WebDev/" + userID).once('value').then(snap => {
+                        if (!snap.exists())
+                            history.push("/notfound")
+                    })
+                }
             }
-            else history.push("/auth");
+            else
+                history.push("/auth");
         });
         if (window.innerWidth >= 1024) {
             let widthOfIframe = Math.floor(((477 - 20) / window.innerWidth) * 100);
             document.getElementsByClassName(classes.iframe)[0].style.width = widthOfIframe + "%";
+            editors.current.style.width = (100 - widthOfIframe) + "%";
+            htmlEditorRef.current.editor.resize();
+            cssEditorRef.current.editor.resize();
+            jsEditorRef.current.editor.resize();
         }
     }, []);
 
@@ -277,6 +311,10 @@ function Editorpage(props) {
             dragToIframeRef.current.style.right = mousePos + "px";
             let widthOfIframe = Math.floor(((mousePos - 20) / window.innerWidth) * 100);
             document.getElementsByClassName(classes.iframe)[0].style.width = widthOfIframe + "%";
+            editors.current.style.width = (100 - widthOfIframe) + "%";
+            htmlEditorRef.current.editor.resize();
+            cssEditorRef.current.editor.resize();
+            jsEditorRef.current.editor.resize();
         }
     }
 
@@ -299,6 +337,12 @@ function Editorpage(props) {
             console.log("Open Output")
             iframeOpen = !iframeOpen;
             document.getElementsByClassName(classes.iframe)[0].style.width = iframeOpen ? "100%" : "0%";
+
+            setTimeout(() => {
+                htmlEditorRef.current.editor.setValue(html);
+                cssEditorRef.current.editor.setValue(css);
+                jsEditorRef.current.editor.setValue(js);
+            }, 1000)
         }
         else {
             console.log("Do nothing")
@@ -309,39 +353,107 @@ function Editorpage(props) {
         firebaseRef.current.child("name").set(e.target.value);
     }
 
+
+
     function Speeddialreturn() {
+        const [openSnackbar, setOpenSnackBar] = React.useState(false);
+        const [snackBarText, setSnackBarText] = React.useState("Link Copied");
+        const handleClose = (event, reason) => {
+            if (reason === 'clickaway') {
+                return;
+            }
+
+            setOpenSnackBar(false);
+        };
+
         const [open, setOpen] = React.useState(false);
+        function copyLink(e) {
+            console.log("Copy Link")
+            const copyTxt = document.createElement("input");
+            copyTxt.value = "https://codersweb.netlify.app/" + e + "/" + userID + "/" + projectID;
+            document.body.parentNode.appendChild(copyTxt);
+            copyTxt.select();
+            document.execCommand("copy")
+            document.body.parentNode.removeChild(copyTxt);
+            setSnackBarText(e.substring(0, 1).toUpperCase() + e.substring(1) + " Link Copied!")
+            setOpenSnackBar(true);
+        }
+
+        function shareLink() {
+            if (navigator.share) {
+                navigator
+                    .share({
+                        title: codeName.current.value + " - Xper",
+                        url: "https://codersweb.netlify.app/edit/" + userID + "/" + projectID
+                    })
+                    .then(() => {
+                        console.log("Thanks for sharing!");
+                    })
+                    .catch(console.error);
+            } else {
+                console.log("support na re");
+                copyLink("edit")
+            }
+        }
+
         const actions = [
             { icon: <HomeRoundedIcon onClick={() => { history.push('/') }} />, name: 'Home' },
-            { icon: <FileCopyIcon />, name: 'Copy Deploy Link' },
-            { icon: <ShareIcon />, name: 'Share Deploy Link' },
+            { icon: <LaunchIcon onClick={() => { window.open(("/deploy/" + userID + "/" + projectID + "/"), "_blank") }} />, name: 'Open Deployed Site' },
+            { icon: <FileCopyIcon onClick={() => { copyLink("deploy") }} />, name: 'Copy Deploy Link' },
+            { icon: <ShareIcon onClick={shareLink} />, name: 'Share Code Link' },
             { icon: <SaveIcon />, name: 'Save' },
         ];
         return (
-            <SpeedDial
-                ariaLabel="SpeedDial example"
-                className={classes.speedDial}
-                icon={<Avatar style={{ height: "30px", width: "30px" }} alt={displayName} src={userPhoto} />}
-                onClose={() => { setOpen(false) }}
-                onOpen={() => { setOpen(true) }}
-                open={open}
-                direction={"down"}
-            >
-                {actions.map((action) => (
-                    <SpeedDialAction
-                        key={action.name}
-                        icon={action.icon}
-                        tooltipTitle={action.name}
-                    />
-                ))}
-            </SpeedDial>
+            <div>
+                <Snackbar open={openSnackbar} anchorOrigin={{ vertical: "bottom", horizontal: "left" }} autoHideDuration={2000} onClose={handleClose}>
+                    <Alert onClose={handleClose} severity="success">
+                        {snackBarText}
+                    </Alert>
+                </Snackbar>
+                <SpeedDial
+                    ariaLabel="SpeedDial example"
+                    className={classes.speedDial}
+                    icon={<Avatar style={{ height: "30px", width: "30px" }} alt={displayName} src={userPhoto} />}
+                    onClose={() => { setOpen(false) }}
+                    onOpen={() => { setOpen(true) }}
+                    open={open}
+                    direction={"down"}
+                    onClick={() => {/*do nothing*/ }}
+                >
+                    {
+                        actions.map((action) => (
+                            <SpeedDialAction
+                                key={action.name}
+                                icon={action.icon}
+                                tooltipTitle={action.name}
+                            />
+                        ))
+                    }
+                </SpeedDial>
+            </div>
         )
     }
 
+    function Loader() {
+        const [openLoader, setOpenLoader] = React.useState(true);
+
+        React.useEffect(() => {
+            firebase.database().ref("WebDev/" + userID + "/" + projectID).once("value").then(snap => {
+                setOpenLoader(false);
+            });
+        }, [])
+
+        return (
+            <Backdrop open={openLoader} style={{ zIndex: 5 }}>
+                <CircularProgress style={{ color: '#A3F7BF' }} />
+            </Backdrop>
+        )
+    }
     return (
         <div onMouseUp={() => { mouseDown = false; }} onMouseMove={dragToShowIframe}>
+            <Loader />
             <div className={classes.header}>
-                <div className={classes.brandingName}>WebDev</div>
+                <Link to="/"><div className={classes.brandingName}>Xper</div></Link>
                 <input ref={codeName} className={classes.codeName} onChange={changeCodeName} placeholder="Project Name" />
                 <Speeddialreturn />
             </div>
@@ -351,66 +463,71 @@ function Editorpage(props) {
                 <div className={classes.tabs} ref={jsTabRef} onClick={() => { openTab('js') }}>JS</div>
             </div>
             <div className={classes.editor} update={loadCode}>
-                <AceEditor
-                    placeholder="HTML goes here"
-                    mode="html"
-                    theme="nord_dark"
-                    name="htmlEditor"
-                    fontSize={18}
-                    wrapEnabled={false}
-                    ref={htmlEditorRef}
-                    showPrintMargin={false}
-                    showGutter={true}
-                    highlightActiveLine={true}
-                    value={html}
-                    setOptions={{
-                        enableBasicAutocompletion: true,
-                        enableLiveAutocompletion: true,
-                        enableSnippets: true,
-                        showLineNumbers: true,
-                    }}
-                    onChange={htmlChanged}
-                />
-                <AceEditor
-                    placeholder="CSS goes here"
-                    mode="css"
-                    theme="nord_dark"
-                    name="cssEditor"
-                    fontSize={18}
-                    wrapEnabled={false}
-                    ref={cssEditorRef}
-                    showPrintMargin={false}
-                    showGutter={true}
-                    highlightActiveLine={true}
-                    value={css}
-                    setOptions={{
-                        enableBasicAutocompletion: true,
-                        enableLiveAutocompletion: true,
-                        enableSnippets: true,
-                        showLineNumbers: true,
-                    }}
-                    onChange={cssChanged}
-                />
-                <AceEditor
-                    placeholder="JavaScript goes here"
-                    mode="javascript"
-                    theme="nord_dark"
-                    name="jsEditor"
-                    fontSize={18}
-                    wrapEnabled={false}
-                    ref={jsEditorRef}
-                    showPrintMargin={false}
-                    showGutter={true}
-                    highlightActiveLine={true}
-                    value={js}
-                    setOptions={{
-                        enableBasicAutocompletion: true,
-                        enableLiveAutocompletion: true,
-                        enableSnippets: true,
-                        showLineNumbers: true,
-                    }}
-                    onChange={jsChanged}
-                />
+                <div className={classes.editors} ref={editors}>
+                    <AceEditor
+                        placeholder="HTML goes here"
+                        mode="html"
+                        theme="nord_dark"
+                        name="htmlEditor"
+                        fontSize={18}
+                        wrapEnabled={false}
+                        ref={htmlEditorRef}
+                        showPrintMargin={false}
+                        showGutter={true}
+                        highlightActiveLine={true}
+                        value={html}
+                        readOnly={letEdit}
+                        setOptions={{
+                            enableBasicAutocompletion: true,
+                            enableLiveAutocompletion: true,
+                            enableSnippets: true,
+                            showLineNumbers: true,
+                        }}
+                        onChange={htmlChanged}
+                    />
+                    <AceEditor
+                        placeholder="CSS goes here"
+                        mode="css"
+                        theme="nord_dark"
+                        name="cssEditor"
+                        fontSize={18}
+                        wrapEnabled={false}
+                        ref={cssEditorRef}
+                        showPrintMargin={false}
+                        showGutter={true}
+                        highlightActiveLine={true}
+                        value={css}
+                        readOnly={letEdit}
+                        setOptions={{
+                            enableBasicAutocompletion: true,
+                            enableLiveAutocompletion: true,
+                            enableSnippets: true,
+                            showLineNumbers: true,
+                        }}
+                        onChange={cssChanged}
+                    />
+                    <AceEditor
+                        placeholder="JavaScript goes here"
+                        mode="javascript"
+                        theme="nord_dark"
+                        name="jsEditor"
+                        fontSize={18}
+                        wrapEnabled={false}
+                        ref={jsEditorRef}
+                        showPrintMargin={false}
+                        showGutter={true}
+                        highlightActiveLine={true}
+                        value={js}
+                        readOnly={letEdit}
+                        setOptions={{
+                            enableBasicAutocompletion: true,
+                            enableLiveAutocompletion: true,
+                            enableSnippets: true,
+                            showLineNumbers: true,
+                        }}
+                        onChange={jsChanged}
+                    />
+                </div>
                 <iframe
                     title=" "
                     className={classes.iframe}
