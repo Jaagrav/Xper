@@ -12,8 +12,8 @@ const useStyles = makeStyles((theme) => ({
     authButton: {
         height: "fit-content",
         width: "fit-content",
-        backgroundColor: "#3B4353",
-        color: "#A3F7BF",
+        backgroundColor: "#1A202E",
+        color: "#50C0FF",
         padding: "10px 10px",
         "&:hover": {
             backgroundColor: "#1D2431"
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     },
     brandingName: {
         fontFamily: "'Orbitron', sans-serif",
-        color: "#A3F7BF",
+        color: "#50C0FF",
         height: "fit-content",
         width: "fit-content",
         fontSize: "3rem",
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
         top: "0",
         right: "0",
         left: "0",
-        backgroundColor: "#A3F7BF"
+        backgroundColor: "#50C0FF"
     }
 }));
 

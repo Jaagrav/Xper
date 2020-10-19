@@ -4,7 +4,6 @@ import { Link, useHistory } from 'react-router-dom';
 import firebase from '../components/firebase';
 
 import Swal from 'sweetalert2';
-// import 'sweetalert2/src/sweetalert2.scss';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
@@ -33,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
         top: 0,
         right: 0,
         left: 0,
-        backgroundColor: '#A3F7BF'
+        backgroundColor: '#50C0FF'
     },
     brandingName: {
         position: 'absolute',
@@ -42,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
         width: "fit-content",
         fontSize: '25px',
         fontWeight: '600',
-        color: '#3B4353',
+        color: '#1A202E',
         margin: 'auto',
         top: '0',
         left: '15px',
@@ -50,8 +49,8 @@ const useStyles = makeStyles((theme) => ({
     },
     fabBtn: {
         position: 'absolute',
-        color: '#3B4353',
-        backgroundColor: '#A3F7BF !important',
+        color: '#1A202E',
+        backgroundColor: '#50C0FF !important',
         margin: 'auto',
         right: '15px',
         bottom: '15px'
@@ -66,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
         bottom: '0'
     },
     menu: {
-        color: '#A3F7BF',
+        color: '#50C0FF',
         fontFamily: "'Comfortaa', sans-serif",
     },
     projectsContainer: {
@@ -92,12 +91,12 @@ const useStyles = makeStyles((theme) => ({
         position: 'relative',
         height: "fit-content",
         width: "100%",
-        backgroundColor: "#3B4353",
+        backgroundColor: "#1A202E",
     },
     title: {
         fontSize: 30,
         fontFamily: "'Comfortaa', sans-serif",
-        color: "#A3F7BF",
+        color: "#50C0FF",
         whiteSpace: "nowrap",
         overflow: "hidden",
         textOverflow: "ellipsis"
@@ -111,7 +110,7 @@ const useStyles = makeStyles((theme) => ({
         color: "#FF6D6D"
     },
     openBtn: {
-        color: "#A3F7BF"
+        color: "#50C0FF"
     },
     noProjects: {
         height: "fit-content",
@@ -125,7 +124,7 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: "'Comfortaa', sans-serif",
         fontSize: '34px',
         textAlign: "center",
-        color: '#3B4353',
+        color: '#1A202E',
         display: "none"
     }
 }));
@@ -255,7 +254,7 @@ function Projectspage() {
     return (
         <div>
             <Backdrop className={classes.backdrop} open={open} style={{ zIndex: 5 }}>
-                <CircularProgress style={{ color: '#A3F7BF' }} />
+                <CircularProgress style={{ color: '#50C0FF' }} />
             </Backdrop>
             <div className={classes.header}>
                 <Link to="/"><div className={classes.brandingName}>Xper</div></Link>

@@ -14,7 +14,7 @@
 }
 
 .MuiList-root.MuiMenu-list.MuiList-padding, .MuiSpeedDialAction-fab, .MuiButtonBase-root.MuiFab-root.MuiSpeedDialAction-fab.MuiSpeedDialAction-fabClosed.MuiFab-sizeSmall {
-  background: #3B4353 !important;color: #A3F7BF !important;
+  background: #1A202E !important;color: #62B0FF !important;
 }
 
 .MuiButtonBase-root.MuiFab-root.MuiSpeedDial-fab.MuiFab-primary, .MuiSpeedDial-root.MuiSpeedDial-directionDown.makeStyles-speedDial-6, .MuiFab-label  {
@@ -33,17 +33,38 @@
   margin: auto;
   top: 0;right: 0;left: 0;bottom: 0;
   display: none;
+  background-color: #0E1218;
 }
-
 #htmlEditor {
   display: block;
 }
+.ace_text-layer > .ace_line {
+  color: #fff !important;
+}
+.ace-nord-dark .ace_gutter-active-line, .ace-nord-dark .ace_marker-layer .ace_selection, .ace-nord-dark .ace_marker-layer .ace_active-line  {
+  background-color: #1A202E;
+}
+.ace-nord-dark .ace_entity.ace_name.ace_function, .ace-nord-dark .ace_meta, .ace-nord-dark .ace_support.ace_type{
+  color: #62B0FF !important;
+}
+.ace-nord-dark .ace_variable, .ace-nord-dark .ace_variable.ace_language{
+  color: rgb(255, 79, 132) !important;
+}
+.ace-nord-dark .ace_string, .ace-nord-dark .ace_constant.ace_numeric {
+  color: #ffcc41 !important;
+}
+.ace-nord-dark .ace_support.ace_function {
+  color: #5bdb9b !important;
+}
+.ace-nord-dark .ace_keyword {
+  color: rgb(154, 76, 218) !important;
+}
 
 .swal2-popup{
-  background-color: #2E3440 !important;
+  background-color: #0E1218 !important;
 }
 .swal2-title {
-  color: #A3F7BF !important;
+  color: #62B0FF !important;
   font-family: 'Comfortaa', sans-serif;
 }
 .swal2-html-container{
@@ -51,7 +72,7 @@
   font-family: 'Comfortaa', sans-serif;
 }
 .swal2-styled.swal2-confirm {
-  background-color: #A3F7BF !important;color: #2E3440 !important;
+  background-color: #62B0FF !important;color: #0E1218 !important;
   font-family: 'Comfortaa', sans-serif;
 }
 .swal2-styled.swal2-cancel{
@@ -64,19 +85,19 @@
     height: 10px;
     width: 10px;
     appearance: none;
-    background-color: #2E3440;
+    background-color: #0E1218;
   }
   
   ::-webkit-scrollbar-thumb {  
     appearance: none;
     border-radius: 10px;
-    background-color: #3B4353;
+    background-color: #1A202E;
   }
   
   ::-webkit-scrollbar-thumb:hover {
     appearance: none;
     border-radius: 10px;
-    background-color: #434b5b;
+    background-color: #262f44;
   }
 }
 

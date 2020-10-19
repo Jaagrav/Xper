@@ -27,8 +27,8 @@ const useStyles = makeStyles((theme) => ({
         margin: 'auto',
         right: 15,
         bottom: 15,
-        color: "#3B4353",
-        backgroundColor: '#A3F7BF !important'
+        color: "#1A202E",
+        backgroundColor: '#50C0FF !important'
     }
 }))
 function Deploypage(props) {
@@ -90,7 +90,7 @@ function Deploypage(props) {
     return (
         <div>
             <Backdrop className={classes.backdrop} open={open} style={{ zIndex: 5 }}>
-                <CircularProgress style={{ color: '#A3F7BF' }} />
+                <CircularProgress style={{ color: '#50C0FF' }} />
             </Backdrop>
             <iframe
                 title=" "

@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
         top: 0,
         right: 0,
         left: 0,
-        backgroundColor: '#A3F7BF',
+        backgroundColor: '#50C0FF',
         zIndex: 1
     },
     brandingName: {
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
         width: "fit-content",
         fontSize: '25px',
         fontWeight: '600',
-        color: '#3B4353',
+        color: '#1A202E',
         margin: 'auto',
         top: '0',
         left: '15px',
@@ -92,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
         bottom: '0',
         right: '60px',
         height: '30px',
-        color: '#3B4353 !important',
+        color: '#1A202E !important',
         textAlign: 'right',
         backgroundColor: 'transparent',
         outline: 'none',
@@ -115,19 +115,19 @@ const useStyles = makeStyles((theme) => ({
         height: '100%',
         width: '100%',
         fontSize: '1rem',
-        color: '#A3F7BF',
+        color: '#50C0FF',
         fontFamily: '"Comfortaa", sans-serif',
         textAlign: 'center',
         padding: '16px 0',
         marginRight: '3px',
         display: 'inline-block',
-        backgroundColor: "#3B4353",
+        backgroundColor: "#1A202E",
         "&.selected": {
-            backgroundColor: "#2E3440 !important",
+            backgroundColor: "#0E1218 !important",
             cursor: 'auto'
         },
         "&:hover": {
-            backgroundColor: "#434b5b",
+            backgroundColor: "#262f44",
         }
     },
     dragToOutput: {
@@ -136,7 +136,7 @@ const useStyles = makeStyles((theme) => ({
         cursor: 'w-resize',
         height: '50px',
         width: '50px',
-        backgroundColor: '#3b4353',
+        backgroundColor: '#1A202E',
         borderRadius: '50px',
         display: 'flex',
         justifyContent: 'center',
@@ -225,9 +225,9 @@ function Editorpage(props) {
                             js = snap.val().js;
                             setLoadCode(!loadCode);
                             codeName.current.value = snap.val().name;
-                            htmlEditorRef.current.editor.setValue(html);
-                            cssEditorRef.current.editor.setValue(css);
-                            jsEditorRef.current.editor.setValue(js);
+                            htmlEditorRef.current.editor.setValue(html, 1);
+                            cssEditorRef.current.editor.setValue(css, 1);
+                            jsEditorRef.current.editor.setValue(js, 1);
                             updateIframe();
                         }
                     }).catch(error => {
@@ -445,7 +445,7 @@ function Editorpage(props) {
 
         return (
             <Backdrop open={openLoader} style={{ zIndex: 5 }}>
-                <CircularProgress style={{ color: '#A3F7BF' }} />
+                <CircularProgress style={{ color: '#50C0FF' }} />
             </Backdrop>
         )
     }
@@ -535,7 +535,7 @@ function Editorpage(props) {
             </div>
             <Tooltip TransitionComponent={Zoom} title="Drag to see output" placement="left" onClick={openOutput} onMouseDown={() => { mouseDown = true; }} ref={dragToIframeRef}>
                 <div className={classes.dragToOutput}>
-                    <PlayArrowRoundedIcon style={{ color: "#A3F7BF" }} />
+                    <PlayArrowRoundedIcon style={{ color: "#50C0FF" }} />
                 </div>
             </Tooltip>
         </div>
