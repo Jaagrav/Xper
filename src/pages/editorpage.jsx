@@ -236,10 +236,40 @@ function Editorpage(props) {
                     })
                 }
                 else {
-                    setLetEdit(true);
                     firebase.database().ref("WebDev/" + userID).once('value').then(snap => {
                         if (!snap.exists())
                             history.push("/notfound")
+                    })
+                    firebase.database().ref("WebDev/" + userID + "/" + projectID).once("value").then(snap => {
+                        if (snap.key === projectID && snap.exists()) {
+                            html = snap.val().html;
+                            css = snap.val().css;
+                            js = snap.val().js;
+                            setLoadCode(!loadCode);
+                            console.log(html, css, js);
+                            codeName.current.disabled = true;
+                            codeName.current.value = snap.val().name;
+                            setLetEdit(true);
+                            htmlEditorRef.current.editor.setValue(html, 1);
+                            cssEditorRef.current.editor.setValue(css, 1);
+                            jsEditorRef.current.editor.setValue(js, 1);
+                            var old_element = document.getElementsByClassName(classes.iframe)[0];
+                            var new_element = old_element.cloneNode(true);
+                            old_element.parentNode.replaceChild(new_element, old_element);
+                            let output = new_element.contentWindow.document;
+                            let htmlDoc = "<html><style>" + css + "</style>" + html + "<script>" + js + "</script></html>";
+                            try {
+                                // output.contentWindow.location.reload(true);
+                                output.open();
+                                output.write(htmlDoc);
+                                output.close();
+                            } catch (e) {
+                                //Fuck You error
+                                // console.log(e)
+                            }
+                        } else history.push("/notfound");
+                    }).catch(error => {
+                        console.warn('Contents not found!', error);
                     })
                 }
             }
@@ -256,11 +286,11 @@ function Editorpage(props) {
         }
     }, []);
 
-    window.addEventListener('resize', e => {
-        console.log("Window Resized!")
-        if (window.innerWidth > 1000)
-            window.location.reload(true);
-    });
+    // window.addEventListener('resize', e => {
+    //     console.log("Window Resized!")
+    //     if (window.innerWidth > 1000)
+    //         window.location.reload(true);
+    // });
 
     function openTab(tabName) {
         htmlTabRef.current.classList.remove("selected");
@@ -287,22 +317,26 @@ function Editorpage(props) {
     }
 
     function updateIframe() {
-        firebaseRef.current.child("html").set(html)
-        firebaseRef.current.child("css").set(css)
-        firebaseRef.current.child("js").set(js)
-        var old_element = document.getElementsByClassName(classes.iframe)[0];
-        var new_element = old_element.cloneNode(true);
-        old_element.parentNode.replaceChild(new_element, old_element);
-        let output = new_element.contentWindow.document;
-        let htmlDoc = "<html><style>" + css + "</style>" + html + "<script>" + js + "</script></html>";
         try {
-            // output.contentWindow.location.reload(true);
-            output.open();
-            output.write(htmlDoc);
-            output.close();
+            firebaseRef.current.child("html").set(html)
+            firebaseRef.current.child("css").set(css)
+            firebaseRef.current.child("js").set(js)
+            var old_element = document.getElementsByClassName(classes.iframe)[0];
+            var new_element = old_element.cloneNode(true);
+            old_element.parentNode.replaceChild(new_element, old_element);
+            let output = new_element.contentWindow.document;
+            let htmlDoc = "<html><style>" + css + "</style>" + html + "<script>" + js + "</script></html>";
+            try {
+                // output.contentWindow.location.reload(true);
+                output.open();
+                output.write(htmlDoc);
+                output.close();
+            } catch (e) {
+                //Fuck You error
+                console.log(e)
+            }
         } catch (e) {
-            //Fuck You error
-            console.log(e)
+            //Fuck you error
         }
     }
     function dragToShowIframe(e) {
