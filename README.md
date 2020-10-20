@@ -1,4 +1,13 @@
 ![Xper Banner](https://i.imgur.com/PdMiPHA.png)  
+## Xper
+
+Xper is a realtime code editor where you can both write and save your code in realtime! The unique thing about Xper is it updates your deployed code in realtime, which means you can code on your computer and immediately be able to check how it looks like on your phone, tablet, and literally everywhere else. Xper is developed in React, which makes it a lightning fast code editor considering everything is being saved remotely. Check it out in the links given below,
+<br>
+Live at: https://xperbycoder.netlify.app
+Source Code: https://github.com/Jaagrav/Xper
+<br>
+You can create issues in case you detect a bug, and if you know how to fix it, you can work on it yourself and make a PR, I will accept all the PRs that deserve to be accepted, so now you can also become a contributor for Xper!!
+<br>
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
