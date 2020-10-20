@@ -268,6 +268,7 @@ function Projectspage() {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                 >
+                    <MenuItem className={classes.menu} onClick={() => { window.open("https://github.com/Jaagrav/Xper", '_blank') }}>Source Code</MenuItem>
                     <MenuItem className={classes.menu} onClick={() => { firebase.auth().signOut(); }}>Logout</MenuItem>
                 </Menu>
             </div>
